@@ -7,7 +7,7 @@ public class PlayerAnimation : MonoBehaviour
 {
     private readonly int _onAttack = Animator.StringToHash(nameof(_onAttack));
     private readonly int _onJump = Animator.StringToHash(nameof(_onJump));
-    private readonly int _onDead = Animator.StringToHash(nameof(_onDead));
+    private readonly int _isDead = Animator.StringToHash(nameof(_isDead));
     private readonly int _onReset = Animator.StringToHash(nameof(_onReset));
 
     [SerializeField] private float _cooldown;
@@ -48,12 +48,12 @@ public class PlayerAnimation : MonoBehaviour
 
     public void PlayDeadAnimation()
     {
-        _animator.SetTrigger(_onDead);
+        _animator.SetBool(_isDead, true);
     }
 
     public void Reset()
     {
-        _animator.SetTrigger(_onReset);
+        _animator.SetBool(_isDead, false);
     }
 
     private IEnumerator CoolDown()

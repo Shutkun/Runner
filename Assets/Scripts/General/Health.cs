@@ -7,25 +7,39 @@ public class Health : MonoBehaviour
 
     public event Action OnDeath;
     private int _currentHealth;
+    private bool _isDead;
 
-    private void Awake()
+    private void OnEnable()
     {
         _currentHealth = _maxHealth;
+        _isDead = false;
     }
 
-    public void TakeDamage(int damage)=>
-        ChangeValue(-damage);
+    public void TakeDamage(int damage)
+    {
+        if (_isDead)
+        {
+            return;
+        }
 
-    public void Reset() =>
+        ChangeValue(-damage);
+    }
+
+    public void Reset()
+    {
         _currentHealth = _maxHealth;
+        _isDead = false;
+    }
 
     private void ChangeValue(int value)
     {
-        if(_currentHealth <= 0)
+        _currentHealth += value;
+
+        if (_currentHealth <= 0)
         {
+            _isDead = true;
             OnDeath?.Invoke();
         }
 
-        _currentHealth += value;
     }
 }
