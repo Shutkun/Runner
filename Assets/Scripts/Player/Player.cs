@@ -11,18 +11,18 @@ public class Player : MonoBehaviour, IDamageble
 
     public event Action GameOver;
     private float _delayGameOver = 2;
-    private Coroutine _coroutine;
+    private Coroutine _coroutineGameOver;
 
     private void OnEnable()
     {
-        _health.OnDeath += onPlayerIsDead;
-        _animation.OnShoot += onPlayerShoot;
+        _health.OnDeath += OnPlayerIsDead;
+        _animation.OnShoot += OnPlayerShoot;
     }
 
     private void OnDisable()
     {
-        _health.OnDeath -= onPlayerIsDead;
-        _animation.OnShoot -= onPlayerShoot;
+        _health.OnDeath -= OnPlayerIsDead;
+        _animation.OnShoot -= OnPlayerShoot;
         StopCoroutine();
     }
 
@@ -39,18 +39,18 @@ public class Player : MonoBehaviour, IDamageble
         _animation.Reset();
     }
 
-    private void onPlayerIsDead()
+    private void OnPlayerIsDead()
     {
         _animation.PlayDeadAnimation();
         _mover.DisableAction();
-        _coroutine = StartCoroutine(WaitBeforeGameOver());
+        _coroutineGameOver = StartCoroutine(WaitBeforeGameOver());
     }
 
     private void StopCoroutine()
     {
-        if (_coroutine != null)
+        if (_coroutineGameOver != null)
         {
-            StopCoroutine(_coroutine);
+            StopCoroutine(_coroutineGameOver);
         }
     }
 
@@ -61,6 +61,6 @@ public class Player : MonoBehaviour, IDamageble
         GameOver?.Invoke();
     }
 
-    private void onPlayerShoot(Transform transform) =>
-        _bulletSpawner.SpawnBullet(transform, false);
+    private void OnPlayerShoot(Transform transform) =>
+        _bulletSpawner.SpawnBullet(transform);
 }

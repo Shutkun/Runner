@@ -7,12 +7,18 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _speed;
     [Space]
     [SerializeField] private PlayerAnimation _animation;
+    [SerializeField] private InputReader _input;
 
-    public bool IsOnAGround => _isOnAGround;
+    public bool IsCanAction => _isCanAction;
     private Vector3 _startPosition;
     private bool _isOnAGround;
     private bool _isCanAction = true;
     private Rigidbody2D _rigidbody2D;
+
+    private void OnEnable()
+    {
+        _input.OnJump += Jump;
+    }
 
     private void Start()
     {
@@ -20,12 +26,6 @@ public class PlayerMover : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
         Reset();
-    }
-
-    private void Update()
-    {
-        Jump();
-        Attack();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -44,6 +44,11 @@ public class PlayerMover : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        _input.OnJump -= Jump;
+    }
+
     public void Reset()
     {
         transform.position = _startPosition;
@@ -60,19 +65,8 @@ public class PlayerMover : MonoBehaviour
     {
         if (_isOnAGround == true && _isCanAction == true)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _animation.PlayJumpAnimation();
-                _rigidbody2D.linearVelocity = new Vector2(_speed, _tapForce);
-            }
-        }
-    }
-
-    private void Attack()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && _isCanAction == true)
-        {
-            _animation.Attack();
+            _animation.PlayJumpAnimation();
+            _rigidbody2D.linearVelocity = new Vector2(_speed, _tapForce);
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemiesSpawner : Spawner<Enemy>
 {
-    [SerializeField] private float _delay;
+    [SerializeField] private float _delayBeforeSpawn;
     [SerializeField] private Transform _spawnArea;
     [SerializeField] private ObjectRemover _remover;
     [SerializeField] private BulletSpawner _bulletSpawner;
@@ -19,7 +19,7 @@ public class EnemiesSpawner : Spawner<Enemy>
 
     private void OnDisable()
     {
-        StopCoroutine(_coroutine);
+        StopCoroutine();
         _remover.OnScreenOut -= ReleaseObject;
     }
 
@@ -39,7 +39,7 @@ public class EnemiesSpawner : Spawner<Enemy>
 
     private IEnumerator Generate()
     {
-        WaitForSeconds wait = new WaitForSeconds(_delay);
+        WaitForSeconds wait = new WaitForSeconds(_delayBeforeSpawn);
 
         while (enabled)
         {
@@ -60,6 +60,14 @@ public class EnemiesSpawner : Spawner<Enemy>
         return new Vector3(x, y, z);
     }
 
+    private void StopCoroutine()
+    {
+        if(_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+    }
+
     private void OnEnemyShoot(Transform gunpoint) =>
-        _bulletSpawner.SpawnBullet(gunpoint,true);
+        _bulletSpawner.SpawnBullet(gunpoint);
 }
