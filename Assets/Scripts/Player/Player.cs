@@ -8,6 +8,8 @@ public class Player : MonoBehaviour, IDamageble
     [SerializeField] private PlayerAnimation _animation;
     [SerializeField] private BulletSpawner _bulletSpawner;
     [SerializeField] private PlayerMover _mover;
+    [SerializeField] private InputReader _input;
+    [SerializeField] private PlayerAttack _attack;
 
     public event Action GameOver;
     private float _delayGameOver = 2;
@@ -17,12 +19,16 @@ public class Player : MonoBehaviour, IDamageble
     {
         _health.OnDeath += OnPlayerIsDead;
         _animation.OnShoot += OnPlayerShoot;
+        _input.OnJump += _mover.Jump;
+        _input.OnAttack += _attack.Attack;
     }
 
     private void OnDisable()
     {
         _health.OnDeath -= OnPlayerIsDead;
         _animation.OnShoot -= OnPlayerShoot;
+        _input.OnJump -= _mover.Jump;
+        _input.OnAttack -= _attack.Attack;
         StopCoroutine();
     }
 

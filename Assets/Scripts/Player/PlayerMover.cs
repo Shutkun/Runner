@@ -7,18 +7,12 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _speed;
     [Space]
     [SerializeField] private PlayerAnimation _animation;
-    [SerializeField] private InputReader _input;
 
     public bool IsCanAction => _isCanAction;
     private Vector3 _startPosition;
     private bool _isOnAGround;
     private bool _isCanAction = true;
     private Rigidbody2D _rigidbody2D;
-
-    private void OnEnable()
-    {
-        _input.OnJump += Jump;
-    }
 
     private void Start()
     {
@@ -44,11 +38,6 @@ public class PlayerMover : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        _input.OnJump -= Jump;
-    }
-
     public void Reset()
     {
         transform.position = _startPosition;
@@ -61,7 +50,7 @@ public class PlayerMover : MonoBehaviour
         _isCanAction = false;
     }
 
-    private void Jump()
+    public void Jump()
     {
         if (_isOnAGround == true && _isCanAction == true)
         {

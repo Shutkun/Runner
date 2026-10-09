@@ -6,24 +6,17 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _cooldownAttack;
     [Space]
     [SerializeField] private PlayerAnimation _animation;
-    [SerializeField] private InputReader _input;
     [SerializeField] private PlayerMover _mover;
 
     private Coroutine _coroutine;
     private bool _canAttack = true;
 
-    private void OnEnable()
-    {
-        _input.OnAttack += Attack;
-    }
-
     private void OnDisable()
     {
         StopCoroutine();
-        _input.OnAttack -= Attack;
     }
 
-    private void Attack()
+    public void Attack()
     {
         if (_canAttack == false || _mover.IsCanAction == false)
         {
